@@ -1,0 +1,29 @@
+import time
+import random
+import paho.mqtt.client as mqtt
+
+# MQTT Broker configuration
+broker_address = "your_broker_address"
+broker_port = 1883
+
+# Create a MQTT client instance
+client = mqtt.Client("patient_health_monitor")
+
+# Connect to the MQTT broker
+client.connect(broker_address, broker_port)
+
+while True:
+    # Simulate sensor data (replace this with actual sensor readings)
+    heart_rate = random.randint(60, 100)
+    body_temperature = random.uniform(36.0, 37.5)
+    systolic_bp = random.randint(110, 140)
+    diastolic_bp = random.randint(70, 90)
+
+    # Publish sensor data to the MQTT broker
+    client.publish("patient/heart_rate", heart_rate)
+    client.publish("patient/body_temperature", body_temperature)
+    client.publish("patient/blood_pressure/systolic", systolic_bp)
+    client.publish("patient/blood_pressure/diastolic", diastolic_bp)
+
+    # Wait for a few seconds before sending the next set of data
+    time.sleep(5)
