@@ -1,0 +1,31 @@
+import paho.mqtt.client as mqtt
+
+# MQTT Broker configuration
+broker_address = "your_broker_address"
+broker_port = 1883
+
+# Create a MQTT client instance
+client = mqtt.Client("data_receiver")
+
+# Callback function when connection is established
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code " + str(rc))
+    # Subscribe to the topics from which the microcontroller will send data
+    client.subscribe("patient/heart_rate")
+    client.subscribe("patient/body_temperature")
+    client.subscribe("patient/blood_pressure/systolic")
+    client.subscribe("patient/blood_pressure/diastolic")
+
+# Callback function when new message is received
+def on_message(client, userdata, msg):
+    print(msg.topic + ": " + msg.payload.decode())
+
+# Set the callback functions
+client.on_connect = on_connect
+client.on_message = on_message
+
+# Connect to the MQTT broker
+client.connect(broker_address, broker_port)
+
+# Start the MQTT loop to receive messages
+client.loop_forever()
